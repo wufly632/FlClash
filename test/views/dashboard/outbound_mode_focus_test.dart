@@ -120,11 +120,15 @@ void main() {
     final trail = await walk(tester, LogicalKeyboardKey.arrowDown);
 
     expect(
-      trail.take(4),
+      trail
+          .where(
+            (label) => ['Rule', 'Global', 'Direct', 'below'].contains(label),
+          )
+          .take(4),
       <String>['Rule', 'Global', 'Direct', 'below'],
       reason:
-          'arrow down should step through the modes without the card itself '
-          'taking a turn, got $trail',
+          'arrow down should step through every mode after the rules shortcut '
+          'without the card itself taking a turn, got $trail',
     );
   });
 

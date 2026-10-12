@@ -3930,6 +3930,76 @@ class AppLocalizations {
     return Intl.message('Added rules', name: 'addedRules', desc: '', args: []);
   }
 
+  /// `Website direct`
+  String get websiteDirect {
+    return Intl.message(
+      'Website direct',
+      name: 'websiteDirect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a domain or paste a web address to connect without a proxy. Only the hostname is matched, not the URL path. For an entire site, enter its base domain (example.com).`
+  String get websiteDirectDesc {
+    return Intl.message(
+      'Enter a domain or paste a web address to connect without a proxy. Only the hostname is matched, not the URL path. For an entire site, enter its base domain (example.com).',
+      name: 'websiteDirectDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Domain or web address`
+  String get websiteAddress {
+    return Intl.message(
+      'Domain or web address',
+      name: 'websiteAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid domain or HTTP(S) URL. Use Punycode for international domains; IP addresses and wildcards are not supported.`
+  String get websiteAddressInvalid {
+    return Intl.message(
+      'Enter a valid domain or HTTP(S) URL. Use Punycode for international domains; IP addresses and wildcards are not supported.',
+      name: 'websiteAddressInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Include subdomains`
+  String get includeSubdomains {
+    return Intl.message(
+      'Include subdomains',
+      name: 'includeSubdomains',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This direct rule already exists`
+  String get websiteRuleExists {
+    return Intl.message(
+      'This direct rule already exists',
+      name: 'websiteRuleExists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Applies in Rule outbound mode with Standard profile overrides. Global added rules precede subscription rules, but profile-specific added rules take priority. Rules disabled for a profile do not apply. Reconnect existing connections after changes.`
+  String get websiteRulesScope {
+    return Intl.message(
+      'Applies in Rule outbound mode with Standard profile overrides. Global added rules precede subscription rules, but profile-specific added rules take priority. Rules disabled for a profile do not apply. Reconnect existing connections after changes.',
+      name: 'websiteRulesScope',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Control global added rules`
   String get controlGlobalAddedRules {
     return Intl.message(

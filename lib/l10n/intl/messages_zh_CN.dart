@@ -549,6 +549,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "includeAllProxyProvidersTip": MessageLookupByLibrary.simpleMessage(
       "开启后包含本配置的全部代理集：订阅自带的，以及任一策略组引用的配置和应用代理集",
     ),
+    "includeSubdomains": MessageLookupByLibrary.simpleMessage("包含子域名"),
     "infiniteTime": MessageLookupByLibrary.simpleMessage("长期有效"),
     "init": MessageLookupByLibrary.simpleMessage("初始化"),
     "initiator": MessageLookupByLibrary.simpleMessage("发起方"),
@@ -1133,6 +1134,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "vpnTip": MessageLookupByLibrary.simpleMessage("重启VPN后改变生效"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV配置"),
+    "websiteAddress": MessageLookupByLibrary.simpleMessage("域名或网址"),
+    "websiteAddressInvalid": MessageLookupByLibrary.simpleMessage(
+      "请输入有效域名或 HTTP(S) 网址。国际化域名请使用 Punycode；不支持 IP 地址和通配符。",
+    ),
+    "websiteDirect": MessageLookupByLibrary.simpleMessage("网站直连"),
+    "websiteDirectDesc": MessageLookupByLibrary.simpleMessage(
+      "输入域名或粘贴网址，让该网站不走代理。仅匹配域名，不区分网址路径。要匹配整个网站，请输入主域名（如 example.com）。",
+    ),
+    "websiteRuleExists": MessageLookupByLibrary.simpleMessage("该直连规则已存在"),
+    "websiteRulesScope": MessageLookupByLibrary.simpleMessage(
+      "适用于「规则」出站模式及「标准」配置覆写。全局附加规则优先于订阅规则，但配置专属附加规则优先级更高；被配置禁用的规则不生效。修改后请重新建立已有连接。",
+    ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("白名单模式"),
     "writeToSystem": MessageLookupByLibrary.simpleMessage("写入系统"),
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(

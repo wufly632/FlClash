@@ -4,6 +4,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/icons/icons.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/views/config/rules.dart';
 import 'package:fl_clash/views/dashboard/widget_metrics.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:material_color_utilities/palettes/tonal_palette.dart';
@@ -43,25 +44,46 @@ class OutboundMode extends ConsumerWidget {
         ),
         child: CommonCard(
           radius: radius,
-          infoPadding: DashboardWidgetMetrics.paddingOf(
-            context,
-          ).copyWith(bottom: 0),
           onPressed: () {},
           skipTraversal: true,
-          info: Info(
-            label: context.appLocalizations.outboundMode,
-            glyph: AppGlyphs.split,
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(top: _rowGap.mAp, bottom: pillInset),
-            child: _ModeRows(
-              mode: mode,
-              inset: inset,
-              pillInset: pillInset,
-              onSelect: (item) {
-                ref.read(setupActionProvider.notifier).changeMode(item);
-              },
-            ),
+          child: Column(
+            children: [
+              InfoHeader(
+                padding: DashboardWidgetMetrics.paddingOf(
+                  context,
+                ).copyWith(bottom: 8.mAp),
+                info: Info(
+                  label: context.appLocalizations.outboundMode,
+                  glyph: AppGlyphs.split,
+                ),
+                actions: [
+                  IconButton(
+                    tooltip: context.appLocalizations.addedRules,
+                    onPressed: () async {
+                      await BaseNavigator.push(context, const AddedRulesView());
+                      if (!context.mounted || !ref.read(initProvider)) return;
+                      final profileId = ref.read(currentProfileIdProvider);
+                      ref.invalidate(setupStateProvider(profileId));
+                      ref.read(setupActionProvider.notifier).autoApplyProfile();
+                    },
+                    icon: const GlyphIcon(AppGlyphs.edit, size: 18),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(top: _rowGap.mAp, bottom: pillInset),
+                  child: _ModeRows(
+                    mode: mode,
+                    inset: inset,
+                    pillInset: pillInset,
+                    onSelect: (item) {
+                      ref.read(setupActionProvider.notifier).changeMode(item);
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

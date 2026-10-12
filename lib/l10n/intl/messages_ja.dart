@@ -608,6 +608,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "includeAllProxyProvidersTip": MessageLookupByLibrary.simpleMessage(
       "有効にすると、このプロファイルのすべてのプロキシプロバイダーを含めます。サブスクリプション自身のものに加え、いずれかのプロキシグループが使うプロファイルとアプリのプロキシプロバイダーも含みます",
     ),
+    "includeSubdomains": MessageLookupByLibrary.simpleMessage("サブドメインを含める"),
     "infiniteTime": MessageLookupByLibrary.simpleMessage("無期限"),
     "init": MessageLookupByLibrary.simpleMessage("初期化"),
     "initiator": MessageLookupByLibrary.simpleMessage("発信元"),
@@ -1268,6 +1269,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "vpnTip": MessageLookupByLibrary.simpleMessage("変更はVPNの再起動後に有効になります"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV設定"),
+    "websiteAddress": MessageLookupByLibrary.simpleMessage("ドメインまたは URL"),
+    "websiteAddressInvalid": MessageLookupByLibrary.simpleMessage(
+      "有効なドメインまたは HTTP(S) URL を入力してください。国際化ドメインには Punycode を使用してください。IP アドレスとワイルドカードには対応していません。",
+    ),
+    "websiteDirect": MessageLookupByLibrary.simpleMessage("サイトを直接接続"),
+    "websiteDirectDesc": MessageLookupByLibrary.simpleMessage(
+      "ドメインまたは URL を入力すると、プロキシを使わずに接続します。URL のパスではなくホスト名のみを照合します。サイト全体にはベースドメイン（example.com）を入力してください。",
+    ),
+    "websiteRuleExists": MessageLookupByLibrary.simpleMessage(
+      "この直接接続ルールは既に存在します",
+    ),
+    "websiteRulesScope": MessageLookupByLibrary.simpleMessage(
+      "ルールモードと標準上書きで適用されます。グローバル追加ルールは購読ルールより優先されますが、設定固有の追加ルールが最優先です。設定で無効化したルールは適用されません。変更後は既存の接続を再接続してください。",
+    ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("ホワイトリストモード"),
     "writeToSystem": MessageLookupByLibrary.simpleMessage("システムに書き込む"),
     "writeToSystemDesc": MessageLookupByLibrary.simpleMessage(

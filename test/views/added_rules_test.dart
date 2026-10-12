@@ -18,6 +18,14 @@ class _RecordingGlobalRules extends TestGlobalRules {
   _RecordingGlobalRules(super.initial);
 
   final deleted = <List<int>>[];
+  final added = <Rule>[];
+  bool failWrite = false;
+
+  @override
+  Future<void> putAsync(Rule rule) async {
+    if (failWrite) throw const MessageException('write failed');
+    added.add(rule);
+  }
 
   @override
   void delAll(Iterable<int> ruleIds) {
@@ -77,7 +85,7 @@ void main() {
     await pumpRules(tester, const []);
 
     expect(find.byType(NullStatus), findsOneWidget);
-    expect(find.text(currentAppLocalizations.add), findsOneWidget);
+    expect(find.byType(CommonFloatingActionButton), findsOneWidget);
   });
 
   testWidgets('lists every rule when the store is populated', (tester) async {
@@ -149,6 +157,42 @@ void main() {
     expect(rules.deleted, [
       [2],
     ]);
+  });
+
+  group('website direct', () {
+    Future<void> submitWebsite(WidgetTester tester) async {
+      await _tapBarAction(tester, currentAppLocalizations.websiteDirect);
+      await tester.enterText(
+        find.byType(TextFormField),
+        'https://example.com/a',
+      );
+      await tester.tap(find.text(currentAppLocalizations.confirm));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('persists a direct rule', (tester) async {
+      await pumpRules(tester, []);
+      await submitWebsite(tester);
+      expect(rules.added.single.rawValue, 'DOMAIN-SUFFIX,example.com,DIRECT');
+    });
+
+    testWidgets('does not duplicate an existing direct rule', (tester) async {
+      await pumpRules(tester, [Rule.parse('DOMAIN-SUFFIX,example.com,DIRECT')]);
+      await submitWebsite(tester);
+      expect(rules.added, isEmpty);
+    });
+
+    testWidgets('write failure releases the busy action', (tester) async {
+      await pumpRules(tester, []);
+      rules.failWrite = true;
+      await submitWebsite(tester);
+      expect(rules.added, isEmpty);
+      final action = tester.widget<IconButton>(
+        _barAction(currentAppLocalizations.websiteDirect),
+      );
+      expect(action.onPressed, isNotNull);
+      expect(tester.takeException(), isNull);
+    });
   });
 
   group('search', () {

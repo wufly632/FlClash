@@ -466,6 +466,26 @@ void main() {
       expect(rows.single.order, isNotNull);
     });
 
+    test(
+      'putAsync completes after persistence and prepends the rule',
+      () async {
+        await notifier.putAsync(const Rule(id: 1, content: 'first'));
+        await notifier.putAsync(const Rule(id: 2, content: 'second'));
+        final rows = await testDatabase.rulesDao.queryGlobalAddedRules().get();
+        expect(rows.map((item) => item.id), [2, 1]);
+      },
+    );
+
+    test('putAsync propagates write failures and rolls back', () async {
+      await notifier.putAsync(const Rule(id: 1, content: 'first'));
+      await breakTable('rules');
+      await expectLater(
+        notifier.putAsync(const Rule(id: 2, content: 'second')),
+        throwsA(isA<Exception>()),
+      );
+      expect(read().map((item) => item.id), [1]);
+    });
+
     test('put keeps an order the caller already supplied', () async {
       notifier.put(const Rule(id: 1, content: 'first', order: 'm'));
       await pumpEventQueue();

@@ -352,12 +352,16 @@ mixin RuleListMixin on OptimisticMixin<List<Rule>> {
     return !ruleListEquality.equals(previous.value, next.value);
   }
 
-  void put(Rule rule) {
+  Future<void> putAsync(Rule rule) {
     final newRule = rule.autoOrder(rule, null, value.firstOrNull?.order);
-    optimistic(
+    return optimisticAsync(
       value.copyAndPut(newRule, (rule) => rule.id == newRule.id),
       () => persistRule(newRule),
     );
+  }
+
+  void put(Rule rule) {
+    unawaited(putAsync(rule).catchError(_reportOptimisticFailure));
   }
 
   void putAll(List<Rule> rules) {

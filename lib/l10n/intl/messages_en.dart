@@ -723,6 +723,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "includeAllProxyProvidersTip": MessageLookupByLibrary.simpleMessage(
       "When enabled, the group takes every proxy provider of this profile: the subscription\'s own, plus the profiles and app proxy providers any proxy group uses",
     ),
+    "includeSubdomains": MessageLookupByLibrary.simpleMessage(
+      "Include subdomains",
+    ),
     "infiniteTime": MessageLookupByLibrary.simpleMessage("Never expires"),
     "init": MessageLookupByLibrary.simpleMessage("Init"),
     "initiator": MessageLookupByLibrary.simpleMessage("Initiator"),
@@ -732,9 +735,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "inputRuleContent": MessageLookupByLibrary.simpleMessage(
       "Enter the rule content",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "This system hides the installed app list until the permission is granted. Authorize it to configure the per-app proxy.",
     ),
@@ -1493,6 +1497,22 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage(
       "WebDAV configuration",
+    ),
+    "websiteAddress": MessageLookupByLibrary.simpleMessage(
+      "Domain or web address",
+    ),
+    "websiteAddressInvalid": MessageLookupByLibrary.simpleMessage(
+      "Enter a valid domain or HTTP(S) URL. Use Punycode for international domains; IP addresses and wildcards are not supported.",
+    ),
+    "websiteDirect": MessageLookupByLibrary.simpleMessage("Website direct"),
+    "websiteDirectDesc": MessageLookupByLibrary.simpleMessage(
+      "Enter a domain or paste a web address to connect without a proxy. Only the hostname is matched, not the URL path. For an entire site, enter its base domain (example.com).",
+    ),
+    "websiteRuleExists": MessageLookupByLibrary.simpleMessage(
+      "This direct rule already exists",
+    ),
+    "websiteRulesScope": MessageLookupByLibrary.simpleMessage(
+      "Applies in Rule outbound mode with Standard profile overrides. Global added rules precede subscription rules, but profile-specific added rules take priority. Rules disabled for a profile do not apply. Reconnect existing connections after changes.",
     ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("Whitelist mode"),
     "writeToSystem": MessageLookupByLibrary.simpleMessage("Write to system"),

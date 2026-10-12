@@ -746,6 +746,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "includeAllProxyProvidersTip": MessageLookupByLibrary.simpleMessage(
       "При включении группа берёт всех провайдеров прокси этого профиля: собственных провайдеров подписки, а также профили и прокси-провайдеры приложения, которые использует любая группа прокси",
     ),
+    "includeSubdomains": MessageLookupByLibrary.simpleMessage(
+      "Включая поддомены",
+    ),
     "infiniteTime": MessageLookupByLibrary.simpleMessage("Бессрочно"),
     "init": MessageLookupByLibrary.simpleMessage("Инициализация"),
     "initiator": MessageLookupByLibrary.simpleMessage("Инициатор"),
@@ -755,9 +758,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "inputRuleContent": MessageLookupByLibrary.simpleMessage(
       "Введите содержимое правила",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Эта система не выдаёт список установленных приложений без разрешения. Предоставьте его, чтобы настроить прокси для отдельных приложений.",
     ),
@@ -1576,6 +1580,20 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage(
       "Настройка WebDAV",
+    ),
+    "websiteAddress": MessageLookupByLibrary.simpleMessage("Домен или URL"),
+    "websiteAddressInvalid": MessageLookupByLibrary.simpleMessage(
+      "Введите допустимый домен или HTTP(S) URL. Для международных доменов используйте Punycode. IP-адреса и подстановочные знаки не поддерживаются.",
+    ),
+    "websiteDirect": MessageLookupByLibrary.simpleMessage("Сайт без прокси"),
+    "websiteDirectDesc": MessageLookupByLibrary.simpleMessage(
+      "Введите домен или URL для прямого подключения. Сопоставляется только имя хоста, а не путь URL. Для всего сайта укажите базовый домен (example.com).",
+    ),
+    "websiteRuleExists": MessageLookupByLibrary.simpleMessage(
+      "Это правило прямого подключения уже существует",
+    ),
+    "websiteRulesScope": MessageLookupByLibrary.simpleMessage(
+      "Действует в режиме правил со стандартным переопределением профиля. Глобальные добавленные правила имеют приоритет над подпиской, но правила конкретного профиля важнее. Отключённые в профиле правила не применяются. После изменений установите существующие соединения заново.",
     ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage(
       "Режим белого списка",

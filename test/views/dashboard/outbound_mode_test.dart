@@ -6,6 +6,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/icons/icons.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/views/config/rules.dart';
 import 'package:fl_clash/views/dashboard/widget_metrics.dart';
 import 'package:fl_clash/views/dashboard/widgets/outbound_mode.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../helpers/glyph_finders.dart';
 import '../../helpers/test_app.dart';
+import '../../helpers/test_database_providers.dart';
 import '../../helpers/test_profiles.dart';
 
 void main() {
@@ -22,7 +24,10 @@ void main() {
 
   setUp(() {
     container = ProviderContainer(
-      overrides: [profilesProvider.overrideWith(TestProfiles.new)],
+      overrides: [
+        profilesProvider.overrideWith(TestProfiles.new),
+        globalRulesProvider.overrideWith(() => TestGlobalRules()),
+      ],
     );
     globalState.container = container;
   });
@@ -66,6 +71,16 @@ void main() {
     );
     await tester.pump();
   }
+
+  testWidgets('rules shortcut opens the global rule editor', (tester) async {
+    await pumpCard(tester, width: 280, unitHeight: 80);
+    container.read(viewSizeProvider.notifier).value = const Size(800, 600);
+    await tester.tap(find.byTooltip(currentAppLocalizations.addedRules));
+    await tester.pumpAndSettle();
+    expect(find.byType(AddedRulesView), findsOneWidget);
+    expect(container.read(patchClashConfigProvider).mode, Mode.rule);
+    expect(tester.takeException(), isNull);
+  });
 
   final highlight = find.byKey(const ValueKey('outbound-mode-highlight'));
 

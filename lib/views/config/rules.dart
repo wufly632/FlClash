@@ -1,11 +1,13 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/features/features.dart';
+import 'package:fl_clash/features/overwrite/website_rule.dart';
 import 'package:fl_clash/icons/icons.dart';
 import 'package:fl_clash/models/clash_config.dart';
 import 'package:fl_clash/models/common.dart';
 import 'package:fl_clash/models/state.dart';
 import 'package:fl_clash/providers/providers.dart';
+import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +23,44 @@ class _AddedRulesViewState extends ConsumerState<AddedRulesView> {
   final _key = uniqueId;
   var _query = SearchQuery('');
   final _searchTexts = Expando<String>();
+  bool _addingWebsite = false;
+
+  Future<void> _handleWebsiteDirect() async {
+    if (_addingWebsite) return;
+    setState(() => _addingWebsite = true);
+    try {
+      final rule = await dialogs.showCommonDialog<Rule>(
+        context: context,
+        child: const WebsiteRuleDialog(),
+      );
+      if (rule == null || !mounted) return;
+      await globalState.safeRun(() async {
+        final rules = await ref.read(globalRulesProvider.future);
+        if (!mounted) return;
+        if (rules.any(
+          (item) =>
+              item.ruleAction == rule.ruleAction &&
+              item.content == rule.content &&
+              item.ruleTarget == rule.ruleTarget,
+        )) {
+          dialogs.showNotifier(context.appLocalizations.websiteRuleExists);
+          return;
+        }
+        await ref.read(globalRulesProvider.notifier).putAsync(rule);
+        if (!mounted) return;
+        final profileId = ref.read(currentProfileIdProvider);
+        if (profileId != null &&
+            ref.read(initProvider) &&
+            ref.read(overwriteTypeProvider(profileId)) ==
+                OverwriteType.standard) {
+          ref.invalidate(setupStateProvider(profileId));
+          await ref.read(setupActionProvider.notifier).applyProfile();
+        }
+      });
+    } finally {
+      if (mounted) setState(() => _addingWebsite = false);
+    }
+  }
 
   List<Rule> _visibleRules(List<Rule> rules) {
     return rules
@@ -124,16 +164,22 @@ class _AddedRulesViewState extends ConsumerState<AddedRulesView> {
       child: CommonScaffold(
         title: appLocalizations.addedRules,
         searchState: AppBarSearchState(onSearch: _handleSearch),
-        actions: [
-          if (!isSelecting)
-            FilledButton.tonal(
-              onPressed: () {
-                _handleAddOrUpdate();
-              },
-              child: Text(appLocalizations.add),
-            ),
-        ],
+        foldPrimaryAction: true,
+        primaryAction: isSelecting
+            ? null
+            : IconButtonData(
+                glyph: AppGlyphs.add,
+                onPressed: () => _handleAddOrUpdate(),
+                tooltip: appLocalizations.add,
+              ),
         iconActions: [
+          if (!isSelecting)
+            IconButtonData(
+              glyph: AppGlyphs.language,
+              onPressed: _handleWebsiteDirect,
+              tooltip: appLocalizations.websiteDirect,
+              isLoading: _addingWebsite,
+            ),
           if (!isSelecting)
             IconButtonData(
               glyph: AppGlyphs.bolt,
@@ -142,41 +188,61 @@ class _AddedRulesViewState extends ConsumerState<AddedRulesView> {
             ),
         ],
         selectionActions: isSelecting ? selectionActions : const [],
-        body: NullStatusSwitcher(
-          isLoading: rulesState.isLoading,
-          isEmpty: rules.isEmpty,
-          isSearching: isSearching,
-          nullStatus: NullStatus(
-            label: appLocalizations.nullTip(appLocalizations.rule),
-            illustration: NullStatusIllustration.rules,
-          ),
-          child: isSearching
-              ? ListView.builder(
-                  padding: _listPadding,
-                  itemBuilder: (_, index) =>
-                      _buildRuleItem(rules, index, selectedRules),
-                  itemExtent: ruleItemHeight,
-                  itemCount: rules.length,
-                )
-              : ReorderableList(
-                  padding: _listPadding,
-                  itemBuilder: (_, index) =>
-                      ReorderableDelayedDragStartListener(
-                        key: ObjectKey(rules[index]),
-                        index: index,
-                        child: _buildRuleItem(rules, index, selectedRules),
-                      ),
-                  itemExtent: ruleItemHeight,
-                  itemCount: rules.length,
-                  onReorderItem: ref.read(globalRulesProvider.notifier).order,
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                16,
+                context.contentTopPadding,
+                16,
+                8,
+              ),
+              child: Text(appLocalizations.websiteRulesScope),
+            ),
+            Expanded(
+              child: NullStatusSwitcher(
+                isLoading: rulesState.isLoading,
+                isEmpty: rules.isEmpty,
+                isSearching: isSearching,
+                nullStatus: NullStatus(
+                  label: appLocalizations.nullTip(appLocalizations.rule),
+                  illustration: NullStatusIllustration.rules,
                 ),
+                child: isSearching
+                    ? ListView.builder(
+                        padding: _listPadding,
+                        itemBuilder: (_, index) =>
+                            _buildRuleItem(rules, index, selectedRules),
+                        itemExtent: ruleItemHeight,
+                        itemCount: rules.length,
+                      )
+                    : ReorderableList(
+                        padding: _listPadding,
+                        itemBuilder: (_, index) =>
+                            ReorderableDelayedDragStartListener(
+                              key: ObjectKey(rules[index]),
+                              index: index,
+                              child: _buildRuleItem(
+                                rules,
+                                index,
+                                selectedRules,
+                              ),
+                            ),
+                        itemExtent: ruleItemHeight,
+                        itemCount: rules.length,
+                        onReorderItem: ref
+                            .read(globalRulesProvider.notifier)
+                            .order,
+                      ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  EdgeInsets get _listPadding =>
-      const EdgeInsets.all(16).copyWith(top: context.contentTopPadding);
+  EdgeInsets get _listPadding => const EdgeInsets.all(16);
 
   Widget _buildRuleItem(List<Rule> rules, int index, Set<dynamic> selected) {
     final rule = rules[index];
