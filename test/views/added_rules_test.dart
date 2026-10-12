@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/features/overwrite/website_rule.dart';
 import 'package:fl_clash/icons/icons.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -160,8 +161,23 @@ void main() {
   });
 
   group('website direct', () {
+    Future<void> openWebsite(WidgetTester tester) async {
+      await tester.tap(_barAction(currentAppLocalizations.websiteDirect));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.byType(WebsiteRuleDialog), findsOneWidget);
+      expect(
+        tester
+            .widget<IconButton>(
+              _barAction(currentAppLocalizations.websiteDirect),
+            )
+            .onPressed,
+        isNull,
+      );
+    }
+
     Future<void> submitWebsite(WidgetTester tester) async {
-      await _tapBarAction(tester, currentAppLocalizations.websiteDirect);
+      await openWebsite(tester);
       await tester.enterText(
         find.byType(TextFormField),
         'https://example.com/a',
@@ -169,6 +185,25 @@ void main() {
       await tester.tap(find.text(currentAppLocalizations.confirm));
       await tester.pumpAndSettle();
     }
+
+    testWidgets('cancelling releases the busy action without saving', (
+      tester,
+    ) async {
+      await pumpRules(tester, []);
+      await openWebsite(tester);
+      await tester.tap(find.text(currentAppLocalizations.cancel));
+      await tester.pumpAndSettle();
+      expect(find.byType(WebsiteRuleDialog), findsNothing);
+      expect(rules.added, isEmpty);
+      expect(
+        tester
+            .widget<IconButton>(
+              _barAction(currentAppLocalizations.websiteDirect),
+            )
+            .onPressed,
+        isNotNull,
+      );
+    });
 
     testWidgets('persists a direct rule', (tester) async {
       await pumpRules(tester, []);
