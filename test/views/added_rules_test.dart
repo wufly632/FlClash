@@ -43,8 +43,12 @@ Rule _rule(int id, String content) {
   );
 }
 
-Finder _barAction(String tooltip) =>
-    find.descendant(of: find.byType(AppBar), matching: find.byTooltip(tooltip));
+Finder _barAction(String tooltip) => find.descendant(
+  of: find.byType(AppBar),
+  matching: find.byWidgetPredicate(
+    (widget) => widget is IconButton && widget.tooltip == tooltip,
+  ),
+);
 
 Future<void> _tapBarAction(WidgetTester tester, String tooltip) async {
   await tester.tap(_barAction(tooltip));
